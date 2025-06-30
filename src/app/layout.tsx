@@ -35,7 +35,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
           {children}
         </div>
       </body>
