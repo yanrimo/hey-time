@@ -34,13 +34,16 @@ export default function HomePage() {
     e.preventDefault();
 
     const [hours, minutes] = time.split(":").map(Number);
+    const [baseHours, baseMinutes] = baseTime.split(":").map(Number);
 
     if (isNaN(hours) || isNaN(minutes) || (hours === 0 && minutes === 0)) {
       alert("有効な値を入力してください。");
       return;
     }
 
-    router.push(`/result?hours=${hours}&minutes=${minutes}`);
+    router.push(
+      `/result?hours=${hours}&minutes=${minutes}&baseHours=${baseHours}&baseMinutes=${baseMinutes}`
+    );
   };
 
   const handleUseCurrentTimeChange = (enabled: boolean) => {

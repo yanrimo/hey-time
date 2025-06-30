@@ -6,22 +6,44 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/common/Card";
-import { add, format } from "date-fns";
+import { add, format, set } from "date-fns";
 import { TZDate } from "@date-fns/tz";
 import Link from "next/link";
 
 type Props = {
   searchParams: Promise<{
+    baseHours: string;
+    baseMinutes: string;
     hours?: string;
     minutes?: string;
   }>;
 };
 
 export default async function ResultPage({ searchParams }: Props) {
-  const { hours: paramsHours, minutes: paramsMinutes } = await searchParams;
+  const {
+    baseHours: paramsBaseHours,
+    baseMinutes: paramsBaseMinutes,
+    hours: paramsHours,
+    minutes: paramsMinutes,
+  } = await searchParams;
+
+  const baseHours = parseInt(paramsBaseHours || "", 10);
+  const baseMinutes = parseInt(paramsBaseMinutes || "", 10);
+
+  if (!baseHours || !baseMinutes) {
+    throw new Error("基準となる時間と分が正しくありません");
+  }
+
   // TODO: 日付共通処理で共通化したい
-  const currentDate = new TZDate(new Date(), "Asia/Tokyo");
-  const formattedCurrentDate = format(currentDate, "H時m分");
+  const today = new TZDate(new Date(), "Asia/Tokyo");
+  const baseDate = set(today, {
+    hours: baseHours,
+    minutes: baseMinutes,
+    seconds: 0,
+    milliseconds: 0,
+  });
+
+  const formattedBaseDate = format(baseDate, "H時m分");
 
   const hours = parseInt(paramsHours || "0", 10);
   const minutes = parseInt(paramsMinutes || "0", 10);
@@ -29,7 +51,7 @@ export default async function ResultPage({ searchParams }: Props) {
   if (isNaN(hours) || isNaN(minutes))
     throw new Error("時間と分の両方を指定してください");
 
-  const newDate = add(currentDate, {
+  const newDate = add(baseDate, {
     hours,
     minutes,
   });
@@ -46,7 +68,7 @@ export default async function ResultPage({ searchParams }: Props) {
       <Card className="w-[90%] shadow-xl border-0">
         <CardHeader>
           <CardTitle className="text-center text-xl">
-            {formattedCurrentDate}から
+            {formattedBaseDate}から
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6 text-center">
