@@ -17,7 +17,7 @@ import { Switch } from "@/components/common/Switch";
 
 export default function HomePage() {
   const router = useRouter();
-  const [time, setTime] = useState("00:00");
+  const [time, setTime] = useState("00:45"); // 初期値は45分後に設定
   const [useCurrentTime, setUseCurrentTime] = useState(true);
 
   const getCurrentTimeString = () => {
