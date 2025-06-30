@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/common/Card";
 import { add, format } from "date-fns";
+import { TZDate } from "@date-fns/tz";
 import Link from "next/link";
 
 type Props = {
@@ -18,7 +19,8 @@ type Props = {
 
 export default async function ResultPage({ searchParams }: Props) {
   const { hours: paramsHours, minutes: paramsMinutes } = await searchParams;
-  const currentDate = new Date();
+  // TODO: 日付共通処理で共通化したい
+  const currentDate = new TZDate(new Date(), "Asia/Tokyo");
   const formattedCurrentDate = format(currentDate, "H時m分");
 
   const hours = parseInt(paramsHours || "0", 10);
